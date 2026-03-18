@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>เขาใหญ่ Adventure Plan 🏕️</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --primary: #fa541c;
+    --primary-dark: #d4380d;
+    --primary-light: #ff7a45;
+    --accent: #ffa940;
+    --green: #237804;
+    --green-light: #52c41a;
+    --blue: #1677ff;
+    --blue-light: #4096ff;
+    --bg: #fff9f6;
+    --card: #ffffff;
+    --text: #1a1a1a;
+    --muted: #666;
+    --border: #f0e0d8;
+    --day2: #722ed1;
+    --day2-light: #9254de;
+  }
+  body { font-family: 'Sarabun', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #d4380d 0%, #fa541c 45%, #ffa940 100%);
+    padding: 48px 20px 56px; text-align: center; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .hero-emoji { font-size: 56px; display: block; margin-bottom: 12px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2)); }
+  .hero h1 { font-size: clamp(28px,6vw,48px); font-weight: 800; color: #fff; text-shadow: 0 2px 12px rgba(0,0,0,0.25); line-height: 1.2; }
+  .hero-sub { font-size: clamp(14px,3vw,18px); color: rgba(255,255,255,0.9); margin-top: 8px; font-weight: 500; }
+  .hero-badges { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+  .badge { background: rgba(255,255,255,0.2); backdrop-filter: blur(8px); border: 1.5px solid rgba(255,255,255,0.4); color: #fff; font-size: 14px; font-weight: 700; padding: 6px 16px; border-radius: 999px; }
+  .badge.highlight { background: #fff; color: var(--primary); border-color: #fff; }
+
+  /* DISTANCE BANNER */
+  .distance-banner {
+    background: linear-gradient(90deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    color: #fff; padding: 14px 20px; text-align: center; font-size: 14px; font-weight: 500;
+    display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;
+  }
+  .distance-banner .dist-item { display: flex; align-items: center; gap: 6px; }
+  .distance-banner .sep { color: rgba(255,255,255,0.3); }
+  .dist-highlight { color: #ffa940; font-weight: 700; }
+
+  /* CONTAINER */
+  .container { max-width: 780px; margin: 0 auto; padding: 0 16px; }
+  .section-title { font-size: 20px; font-weight: 800; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+  .divider { height: 1px; background: var(--border); margin: 32px 16px 0; }
+
+  /* ROUTE STRIP */
+  .route-section { padding: 32px 16px 0; }
+  .route-strip { background: var(--card); border: 2px solid var(--border); border-radius: 16px; padding: 20px; overflow-x: auto; box-shadow: 0 2px 12px rgba(250,84,28,0.08); }
+  .route-flow { display: flex; align-items: center; min-width: max-content; }
+  .route-node { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .route-node .node-icon { width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; box-shadow: 0 3px 10px rgba(0,0,0,0.12); }
+  .node-bkk .node-icon { background: #1a1a2e; color: #fff; }
+  .node-shop .node-icon { background: #e6f4ff; border: 2px solid #1677ff; }
+  .node-snack .node-icon { background: #fff7e6; border: 2px solid #ffa940; }
+  .node-food .node-icon { background: #fff1f0; border: 2px solid var(--primary); }
+  .node-atv .node-icon { background: #fff1f0; border: 2px solid var(--primary-dark); }
+  .node-hotel .node-icon { background: #f6ffed; border: 2px solid var(--green-light); }
+  .node-cafe .node-icon { background: #f9f0ff; border: 2px solid var(--day2); }
+  .node-temple .node-icon { background: #fff7e6; border: 2px solid #fa8c16; }
+  .node-dam .node-icon { background: #e6f4ff; border: 2px solid #1677ff; }
+  .node-bts .node-icon { background: #1a1a2e; color: #fff; }
+  .route-node .node-label { font-size: 10px; font-weight: 700; color: var(--text); text-align: center; max-width: 60px; line-height: 1.3; }
+  .route-node .node-sub { font-size: 10px; color: var(--muted); text-align: center; }
+  .arrow-line { flex: 1; height: 2px; background: linear-gradient(90deg, var(--primary-light), var(--accent)); position: relative; min-width: 22px; margin-bottom: 22px; }
+  .arrow-line::after { content: '▶'; position: absolute; right: -6px; top: -8px; font-size: 9px; color: var(--accent); }
+  .arrow-line.day2 { background: linear-gradient(90deg, var(--day2-light), #b37feb); }
+  .arrow-line.day2::after { color: #b37feb; }
+
+  .route-note { background: linear-gradient(135deg, #fff9f0, #fff3e6); border: 1.5px solid #ffd591; border-left: 4px solid var(--accent); border-radius: 12px; padding: 14px 16px; margin-top: 14px; font-size: 14px; color: #7d4e00; display: flex; gap: 10px; }
+  .route-note .note-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+
+  /* TIMELINE */
+  .timeline-section { padding: 28px 16px 0; }
+  .day-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding: 12px 18px; border-radius: 12px; font-weight: 800; font-size: 18px; color: #fff; }
+  .day-header.day1 { background: linear-gradient(135deg, var(--primary-dark), var(--primary)); }
+  .day-header.day2 { background: linear-gradient(135deg, #391085, var(--day2)); }
+  .day-header .day-num { font-size: 32px; font-weight: 800; opacity: 0.4; margin-left: auto; }
+
+  .timeline { position: relative; padding-left: 36px; }
+  .timeline::before { content: ''; position: absolute; left: 15px; top: 8px; bottom: 8px; width: 2px; background: linear-gradient(180deg, var(--primary-light), var(--border)); border-radius: 2px; }
+  .timeline.day2::before { background: linear-gradient(180deg, var(--day2-light), var(--border)); }
+
+  .tl-item { position: relative; margin-bottom: 18px; }
+  .tl-dot { position: absolute; left: -28px; top: 14px; width: 18px; height: 18px; border-radius: 50%; background: var(--primary); border: 3px solid #fff; box-shadow: 0 0 0 2px var(--primary-light); z-index: 1; }
+  .timeline.day2 .tl-dot { background: var(--day2); box-shadow: 0 0 0 2px var(--day2-light); }
+  .tl-dot.special { background: #fff; border-color: var(--primary); width: 20px; height: 20px; left: -29px; }
+  .timeline.day2 .tl-dot.special { border-color: var(--day2); }
+
+  .tl-card { background: var(--card); border: 1.5px solid var(--border); border-radius: 14px; padding: 14px 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+  .tl-card:hover { box-shadow: 0 4px 20px rgba(250,84,28,0.1); }
+
+  .tl-time-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+  .tl-time { font-size: 12px; font-weight: 700; color: var(--primary); background: #fff1ec; display: inline-block; padding: 2px 10px; border-radius: 999px; letter-spacing: 0.5px; }
+  .timeline.day2 .tl-time { color: var(--day2); background: #f9f0ff; }
+  .drive-time { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 4px; }
+  .drive-time strong { color: var(--text); }
+
+  .tl-card h3 { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 4px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .tl-card p { font-size: 14px; color: var(--muted); line-height: 1.55; }
+  .tl-card .location { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 4px; margin-top: 6px; }
+  .tl-card .location::before { content: '📍'; font-size: 11px; }
+
+  .leg-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; background: #f0f0f0; color: #555; padding: 2px 8px; border-radius: 999px; }
+  .leg-badge.km { background: #e6f4ff; color: #096dd9; }
+  .leg-badge.dur { background: #fff7e6; color: #d46b08; }
+
+  .tl-meta { display: flex; align-items: center; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .cost-tag { font-size: 12px; font-weight: 700; color: var(--green); background: #f6ffed; border: 1px solid #b7eb8f; padding: 3px 10px; border-radius: 999px; }
+  .book-tag { font-size: 12px; font-weight: 600; color: #d46b08; background: #fff7e6; border: 1px solid #ffd591; padding: 3px 10px; border-radius: 999px; }
+  .shop-tag { font-size: 12px; font-weight: 600; color: #096dd9; background: #e6f4ff; border: 1px solid #91caff; padding: 3px 10px; border-radius: 999px; }
+
+  .map-btn { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 700; color: #fff; background: var(--blue); padding: 5px 14px; border-radius: 999px; text-decoration: none; margin-left: auto; transition: background 0.2s, transform 0.15s; }
+  .map-btn:hover { background: var(--blue-light); transform: translateY(-1px); }
+
+  /* special card styles */
+  .tl-card.drive { background: linear-gradient(135deg, #1a1a2e, #16213e); border-color: #0f3460; }
+  .tl-card.drive .tl-time { color: #ffa940; background: rgba(255,169,64,0.15); }
+  .tl-card.drive h3, .tl-card.drive p { color: #e2e8f0; }
+  .tl-card.drive .location { color: #94a3b8; }
+  .tl-card.drive .location::before { content: '🛣️'; }
+  .tl-card.drive .leg-badge.km { background: rgba(230,244,255,0.15); color: #93c5fd; }
+  .tl-card.drive .leg-badge.dur { background: rgba(255,247,230,0.15); color: #fbbf24; }
+  .tl-card.drive .drive-time { color: rgba(255,255,255,0.5); }
+  .tl-card.drive .drive-time strong { color: rgba(255,255,255,0.85); }
+
+  .tl-card.checkin { background: linear-gradient(135deg, #f6ffed, #f0fff0); border-color: #95de64; }
+  .tl-card.checkin h3 { color: var(--green); }
+  .tl-card.checkin .tl-time { color: var(--green); background: #f6ffed; }
+
+  .tl-card.bbq { background: linear-gradient(135deg, #fff9f0, #fff3e0); border-color: #ffd591; }
+  .tl-card.shop { background: linear-gradient(135deg, #e6f4ff, #f0f5ff); border-color: #91caff; }
+  .tl-card.shop h3 { color: #096dd9; }
+  .tl-card.shop .tl-time { color: #096dd9; background: #e6f4ff; }
+
+  /* LEG CONNECTOR */
+  .leg-connector {
+    display: flex; align-items: center; gap: 10px; padding: 6px 0 6px 0;
+    margin-bottom: 4px; position: relative;
+  }
+  .leg-connector::before { content: ''; position: absolute; left: -21px; top: 0; bottom: 0; width: 2px; background: repeating-linear-gradient(180deg, var(--primary-light) 0px, var(--primary-light) 4px, transparent 4px, transparent 8px); }
+  .timeline.day2 .leg-connector::before { background: repeating-linear-gradient(180deg, var(--day2-light) 0px, var(--day2-light) 4px, transparent 4px, transparent 8px); }
+  .leg-info { display: flex; gap: 6px; align-items: center; padding: 5px 12px; background: var(--card); border: 1px dashed var(--border); border-radius: 999px; font-size: 12px; color: var(--muted); }
+  .leg-info .icon { font-size: 13px; }
+
+  /* DISTANCE BOX */
+  .dist-section { padding: 28px 16px 0; }
+  .dist-card { background: linear-gradient(135deg, #0d1b4b, #1a2a6c, #2563eb); border-radius: 16px; padding: 24px; color: #fff; box-shadow: 0 8px 32px rgba(37,99,235,0.2); }
+  .dist-card h2 { font-size: 18px; font-weight: 800; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .dist-days { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+  .dist-day { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; padding: 14px; }
+  .dist-day h4 { font-size: 13px; color: rgba(255,255,255,0.7); margin-bottom: 10px; }
+  .dist-leg { display: flex; justify-content: space-between; align-items: center; font-size: 13px; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .dist-leg:last-child { border-bottom: none; font-weight: 700; color: #93c5fd; margin-top: 4px; }
+  .dist-leg .place { color: rgba(255,255,255,0.8); font-size: 12px; }
+  .dist-leg .km { color: #fbbf24; font-weight: 600; font-size: 12px; }
+  .dist-leg .dur { color: #86efac; font-size: 11px; }
+  .dist-total { background: rgba(255,255,255,0.08); border-radius: 10px; padding: 14px; display: flex; justify-content: space-around; flex-wrap: wrap; gap: 10px; }
+  .dist-total-item { text-align: center; }
+  .dist-total-item .val { font-size: 26px; font-weight: 800; color: #93c5fd; }
+  .dist-total-item .lbl { font-size: 12px; color: rgba(255,255,255,0.6); }
+
+  /* COST */
+  .cost-section { padding: 28px 16px 0; }
+  .cost-card { background: linear-gradient(135deg, #092b00, #135200, #237804); border-radius: 16px; padding: 24px; color: #fff; box-shadow: 0 8px 32px rgba(35,120,4,0.25); }
+  .cost-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
+  .cost-header h2 { font-size: 20px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+  .cost-total { background: rgba(255,255,255,0.15); border: 1.5px solid rgba(255,255,255,0.3); padding: 8px 18px; border-radius: 12px; text-align: center; }
+  .cost-total .amount { font-size: 24px; font-weight: 800; color: #95de64; }
+  .cost-total .label { font-size: 11px; color: rgba(255,255,255,0.7); }
+  .cost-bars { display: flex; flex-direction: column; gap: 10px; }
+  .cost-row { display: flex; flex-direction: column; gap: 4px; }
+  .cost-row-header { display: flex; justify-content: space-between; font-size: 14px; font-weight: 600; }
+  .cost-row-header .cat { color: rgba(255,255,255,0.85); display: flex; align-items: center; gap: 6px; }
+  .cost-row-header .val { color: #95de64; font-weight: 700; }
+  .bar-track { height: 10px; background: rgba(255,255,255,0.12); border-radius: 999px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #52c41a, #95de64); }
+  .cost-note { margin-top: 16px; font-size: 12px; color: rgba(255,255,255,0.6); text-align: center; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.1); }
+
+  /* PREP */
+  .prep-section { padding: 28px 16px 0; }
+  .prep-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+  .prep-item { background: var(--card); border: 1.5px solid var(--border); border-radius: 14px; padding: 16px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.04); transition: transform 0.15s; }
+  .prep-item:hover { transform: translateY(-2px); }
+  .prep-item .prep-icon { font-size: 30px; margin-bottom: 8px; display: block; }
+  .prep-item .prep-name { font-size: 14px; font-weight: 700; color: var(--text); }
+  .prep-item .prep-desc { font-size: 12px; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+  .prep-item.must { border-color: var(--primary); background: #fff9f6; }
+  .prep-item.must .prep-name { color: var(--primary); }
+
+  /* TIPS */
+  .tips-section { padding: 28px 16px 0; }
+  .tips-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+  .tip-card { background: var(--card); border: 1.5px solid var(--border); border-radius: 14px; padding: 16px; display: flex; gap: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  .tip-icon { font-size: 26px; flex-shrink: 0; }
+  .tip-text h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .tip-text p { font-size: 13px; color: var(--muted); line-height: 1.45; }
+
+  /* FOOTER */
+  footer { margin-top: 40px; padding: 24px 16px; text-align: center; background: linear-gradient(135deg, var(--primary-dark), var(--primary)); color: rgba(255,255,255,0.85); font-size: 14px; }
+  footer strong { color: #fff; }
+
+  @media (max-width: 520px) {
+    .timeline { padding-left: 28px; }
+    .timeline::before { left: 11px; }
+    .tl-dot { left: -22px; }
+    .tl-dot.special { left: -23px; }
+    .leg-connector::before { left: -17px; }
+    .tl-meta { flex-direction: column; align-items: flex-start; }
+    .map-btn { margin-left: 0; }
+    .dist-days { grid-template-columns: 1fr; }
+    .cost-header { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ HERO ══ -->
+<div class="hero">
+  <span class="hero-emoji">🏕️</span>
+  <h1>เขาใหญ่ Adventure Plan</h1>
+  <p class="hero-sub">สุวรรณภูมิ → สระบุรี → ปากช่อง → เขาใหญ่ → กลับ BTS อุดมสุข</p>
+  <div class="hero-badges">
+    <span class="badge highlight">🌙 1 คืน 2 วัน</span>
+    <span class="badge">👥 6 คน</span>
+    <span class="badge">🎯 Adventure Mode</span>
+    <span class="badge">🛣️ ~535 กม. รวมทั้งทริป</span>
+  </div>
+</div>
+
+<!-- ══ BANNER ══ -->
+<div class="distance-banner">
+  <div class="dist-item">📅 วันที่ 1: <span class="dist-highlight">~220 กม.</span></div>
+  <span class="sep">|</span>
+  <div class="dist-item">📅 วันที่ 2: <span class="dist-highlight">~315 กม.</span></div>
+  <span class="sep">|</span>
+  <div class="dist-item">🔄 รวมทั้งทริป: <span class="dist-highlight">~535 กม.</span></div>
+  <span class="sep">|</span>
+  <div class="dist-item">✈️ สุวรรณภูมิ → ปากช่อง: <span class="dist-highlight">~185 กม.</span></div>
+</div>
+
+<!-- ══ ROUTE STRIP DAY 1 ══ -->
+<div class="route-section container">
+  <div class="section-title">🛣️ Route วันที่ 1 — Adventure Run</div>
+  <div class="route-strip">
+    <div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:12px;">📍 DAY 1 ROUTE</div>
+    <div class="route-flow">
+      <div class="route-node node-bkk"><div class="node-icon">✈️</div><div class="node-label">สุวรรณภูมิ</div><div class="node-sub">09:00</div></div>
+      <div class="arrow-line"></div>
+      <div class="route-node node-shop"><div class="node-icon">🛒</div><div class="node-label">Makro สระบุรี</div><div class="node-sub">10:30</div></div>
+      <div class="arrow-line"></div>
+      <div class="route-node node-snack"><div class="node-icon">🍌</div><div class="node-label">กล้วยทอด</div><div class="node-sub">12:05</div></div>
+      <div class="arrow-line"></div>
+      <div class="route-node node-food"><div class="node-icon">🍽️</div><div class="node-label">ครัวกำปั่น</div><div class="node-sub">12:30</div></div>
+      <div class="arrow-line"></div>
+      <div class="route-node node-atv"><div class="node-icon">🏍️</div><div class="node-label">ATV</div><div class="node-sub">14:00</div></div>
+      <div class="arrow-line"></div>
+      <div class="route-node node-hotel"><div class="node-icon">🏡</div><div class="node-label">BeFinn Villa</div><div class="node-sub">16:00</div></div>
+    </div>
+    <div class="route-note">
+      <span class="note-icon">💡</span>
+      <div><strong>Strategy: วิ่ง 1 ทาง ไม่วนรถ!</strong><br>
+      ออกจากสุวรรณภูมิ แวะ Makro สระบุรีซื้อของ BBQ → วิ่งต่อ ทล.2 เข้าปากช่อง → ขึ้น ถนนธนะรัชต์ ทล.2090 ตรงไปเรื่อยๆ ครัวกำปั่น → ATV → Villa ไม่มีวนซ้ำ ✅</div>
+    </div>
+  </div>
+
+  <!-- Route Day 2 -->
+  <div style="margin-top:16px;">
+    <div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:12px;">📍 DAY 2 ROUTE (ขากลับ)</div>
+    <div class="route-strip">
+      <div class="route-flow">
+        <div class="route-node node-hotel"><div class="node-icon">🏡</div><div class="node-label">BeFinn Villa</div><div class="node-sub">10:00</div></div>
+        <div class="arrow-line day2"></div>
+        <div class="route-node node-cafe"><div class="node-icon">🌳</div><div class="node-label">Saisook Café</div><div class="node-sub">10:12</div></div>
+        <div class="arrow-line day2"></div>
+        <div class="route-node node-temple"><div class="node-icon">🙏</div><div class="node-label">LP Thuat</div><div class="node-sub">11:10</div></div>
+        <div class="arrow-line day2"></div>
+        <div class="route-node node-dam"><div class="node-icon">💧</div><div class="node-label">เขื่อนลำตะคอง</div><div class="node-sub">12:35</div></div>
+        <div class="arrow-line day2"></div>
+        <div class="route-node node-bts"><div class="node-icon">🚇</div><div class="node-label">BTS อุดมสุข</div><div class="node-sub">~17:00</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ DAY 1 ══ -->
+<div class="timeline-section container">
+  <div class="day-header day1">
+    <span>📅</span>
+    <div>
+      <div>วันที่ 1 — ออกรถ! สุวรรณภูมิ → เขาใหญ่</div>
+      <div style="font-size:13px;font-weight:500;opacity:0.85;">Makro · กล้วยทอด · ครัวกำปั่น · ATV · BeFinn</div>
+    </div>
+    <span class="day-num">01</span>
+  </div>
+
+  <div class="timeline">
+
+    <!-- 09:00 ออกรถ -->
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-card drive">
+        <div class="tl-time-row">
+          <span class="tl-time">🚐 09:00 น.</span>
+          <span class="leg-badge">🏁 จุดเริ่มต้น</span>
+        </div>
+        <h3>✈️ ออกจากสนามบินสุวรรณภูมิ</h3>
+        <p>รวมพลที่ Suvarnabhumi Airport ขึ้นรถ ออกเดินทาง! เส้นทาง: ทล.7 → วงแหวนกาญจนาภิเษก (ทล.9) → ทล.1 (พหลโยธิน) → สระบุรี</p>
+        <div class="location">Suvarnabhumi Airport, Bang Na, Samut Prakan</div>
+        <div class="tl-meta">
+          <a class="map-btn" href="https://maps.google.com/?q=Suvarnabhumi+Airport+Bangkok" target="_blank">🗺️ Map</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- leg 1 -->
+    <div class="leg-connector">
+      <div class="leg-info">
+        <span class="icon">🛣️</span>
+        <span>ทล.7 → ทล.9 → ทล.1</span>
+        <span class="leg-badge km">📏 ~125 กม.</span>
+        <span class="leg-badge dur">⏱️ ~1 ชม. 30 นาที</span>
+      </div>
+    </div>
+
+    <!-- 10:30 Makro -->
+    <div class="tl-item">
+      <div class="tl-dot special"></div>
+      <div class="tl-card shop">
+        <div class="tl-time-row">
+          <span class="tl-time">🛒 10:30 น.</span>
+          <span class="leg-badge">แวะซื้อของ ~40 นาที</span>
+        </div>
+        <h3>🛒 Makro สระบุรี — ช้อปของ BBQ</h3>
+        <p>แวะซื้อวัตถุดิบ BBQ เนื้อ หมู ไก่ ผัก เครื่องดื่ม ถ่าน และของใช้สำหรับคืนนี้ที่ Villa ซื้อให้ครบ ไม่ต้องแวะอีก! ใช้เวลา ~40 นาที</p>
+        <div class="location">66 ถ.3, Taling Chan, Mueang Saraburi District, Saraburi 18000</div>
+        <div class="tl-meta">
+          <span class="shop-tag">🛍️ ซื้อ BBQ + เครื่องดื่ม + ของใช้</span>
+          <a class="map-btn" href="https://maps.google.com/?q=Makro+Saraburi+Taling+Chan" target="_blank">🗺️ Map</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- leg 2 -->
+    <div class="leg-connector">
+      <div class="leg-info">
+        <span class="icon">🛣️</span>
+        <span>ทล.2 (มิตรภาพ) → ปากช่อง</span>
+        <span class="leg-badge km">📏 ~60 กม.</span>
+        <span class="leg-badge dur">⏱️ ~50 นาที</span>
+      </div>
+    </div>
+
+    <!-- 12:05 กล้วยทอด -->
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-card">
+        <div class="tl-time-row">
+          <span class="tl-time">🍌 12:05 น.</span>
+          <span class="leg-badge">แวะเร็ว ~15 นาที</span>
+        </div>
+        <h3>🍌 กล้วยทอดสุโขทัย — ของฝากปากช่อง</h3>
+        <p>ป้ายแดง! จุดแวะซื้อกล้วยทอดขึ้นชื่อปากช่อง ซื้อกินบนรถหรือฝากคนที่บ้าน อยู่ริมถนนก่อนขึ้น ถนนธนะรัชต์</p>
+        <div class="location">Thanaratch Rd, Nong Nam Daeng, Pak Chong District, Nakhon Ratchasima 30130</div>
+        <div class="tl-meta">
+          <span class="cost-tag">💰 ~50-100฿/คน</span>
+          <a class="map-btn" href="https://maps.google.com/?q=กล้วยทอดสุโขทัย+ปากช่อง+นครราชสีมา" target="_blank">🗺️ Map</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- leg 3 -->
+    <div class="leg-connector">
+      <div class="leg-info">
+        <span class="icon">🛣️</span>
+        <span>ถนนธนะรัชต์ (ทล.2090) เข้า Mu Si</span>
+        <span class="leg-badge km">📏 ~12 กม.</span>
+        <span class="leg-badge dur">⏱️ ~15 นาที</span>
+      </div>
+    </div>
+
+    <!-- 12:30 ครัวกำปั่น -->
+    <div class="tl-item">
+      <div class="tl-dot special"></div>
+      <div class="tl-card">
+        <div class="tl-time-row">
+          <span class="tl-time">🍛 12:30 น.</span>
+          <span class="leg-badge">มื้อกลางวัน ~1 ชม. 15 นาที</span>
+        </div>
+        <h3>🍽️ ครัวกำปั่น — มื้อกลางวัน</h3>
+        <p>อาหารไทยรสดั้งเดิม บรรยากาศน่ารัก ปลาทอดน้ำปลา ผัดผัก ต้มยำ สไตล์บ้านๆ เหมาะกับกลุ่ม 6 คน <strong>โทรจองก่อนไปเสมอ!</strong> ใช้เวลากินราวๆ 1 ชั่วโมง 15 นาที</p>
+        <div class="location">GC8J+QJJ, Mu Si, Pak Chong District, Nakhon Ratchasima 30130</div>
+        <div class="tl-meta">
+          <span class="cost-tag">💰 ~200-350฿/คน</span>
+          <span class="book-tag">📞 จองล่วงหน้า!</span>
+          <a class="map-btn" href="https://maps.google.com/?q=ครัวกำปั่น+ปากช่อง+นครราชสีมา" target="_blank">🗺️ Map</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- leg 4 -->
+    <div class="leg-connector">
+      <div class="leg-info">
+        <span class="icon">🛣️</span>
+        <span>ถนนธนะรัชต์ ต่อไปใน Mu Si</span>
+        <span class="leg-badge km">📏 ~7 กม.</span>
+        <span class="leg-badge dur">⏱️ ~10 นาที</span>
+      </div>
+    </div>
+
+    <!-- 14:00 ATV -->
+    <div class="tl-item">
+      <div class="tl-dot special"></div>
+      <div class="tl-card">
+        <div class="tl-time-row">
+          <span class="tl-time">🏍️ 14:00 น.</span>
+          <span class="leg-badge">ATV + เตรียมตัว ~1.5 ชม.</span>
+        </div>
+        <h3>🤠 Banyakart ATV Khao Yai — 1 ชั่วโมง</h3>
+        <p>ขับ ATV ลุยโคลน ลุยทางออฟโรด 1 ชั่วโมงเต็ม! เส้นทางผ่านป่า วิวดีมาก เหมาะกับกลุ่มที่อยากได้ความตื่นเต้น แนะนำใส่เสื้อผ้าที่พร้อมเลอะ</p>
+        <div class="location">ตำบลหมูสี, Pak Chong District, Nakhon Ratchasima 30130 (ถนนธนะรัชต์ ~กม.5-8)</div>
+        <div class="tl-meta">
+          <span class="cost-tag">💰 ~600-900฿/คน</span>
+          <span class="book-tag">📞 จองล่วงหน้า!</span>
+          <a class="map-btn" href="https://maps.google.com/?q=Banyakart+ATV+Khao+Yai+Pak+Chong" target="_blank">🗺️ Map</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- leg 5 -->
+    <div class="leg-connector">
+      <div class="leg-info">
+        <span class="icon">🛣️</span>
+        <span>ถนนธนะรัชต์ → เข้า Pak Chong</span>
+        <span class="leg-badge km">📏 ~12 กม.</span>
+        <span class="leg-badge dur">⏱️ ~18 นาที</span>
+      </div>
+    </div>
+
+    <!-- 15:45 + BBQ 19:00 -->
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-card checkin">
+        <div class="tl-time-row">
+          <span class="tl-time">🏡 16:00 น.</span>
+          <span class="leg-badge">เช็คอิน + พักผ่อน</span>
+        </div>
+        <h3>🛎️ BeFinn Pool Villa Khao Yai — เช็คอิน!</h3>
+        <p>The Forest land by KYLD — วางของ อาบน้ำ เปลี่ยนชุด พักผ่อนสักครู่ ก่อนลงสระ หรือเตรียมของ BBQ สำหรับมื้อเย็น</p>
+        <div class="location">445/51, Pak Chong District, Nakhon Ratchasima 30450</div>
+        <div class="tl-meta">
+          <a class="map-btn" href="https://maps.google.com/?q=BeFinn+Pool+Villa+Khao+Yai+Forest+land+KYLD" target="_blank">🗺️ Map</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 19:00 BBQ -->
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-card bbq">
+        <div class="tl-time-row">
+          <span class="tl-time">🔥 19:00 น.</span>
+          <span class="leg-badge">มื้อเย็น + สังสรรค์</span>
+        </div>
+        <h3>🍖 BBQ มื้อเย็น + กิจกรรมกลุ่ม</h3>
+        <p>ปิ้งย่างของที่ซื้อจาก Makro รอบกองไฟ เล่นเกม จิบเครื่องดื่ม สนุกกับดาวและอากาศเขาใหญ่ยามค่ำ 🌟 ลงสระว่ายน้ำได้ตลอดคืน!</p>
+        <div class="location">BeFinn Pool Villa — ที่พัก</div>
+        <div class="tl-meta">
+          <span class="cost-tag">🛒 วัตถุดิบจาก Makro รวมอยู่แล้ว</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /timeline day1 -->
+
+  <!-- Day 1 summary bar -->
+  <div style="background:linear-gradient(135deg,#fff1ec,#fff9f6);border:1.5px solid #ffb59a;border-radius:12px;padding:14px 16px;margin-top:12px;display:flex;gap:20px;flex-wrap:wrap;justify-content:center;text-align:center;">
+    <div><div style="font-size:22px;font-weight:800;color:var(--primary)">~220 กม.</div><div style="font-size:12px;color:var(--muted)">ระยะทางวันที่ 1</div></div>
+    <div><div style="font-size:22px;font-weight:800;color:var(--primary)">~3.5 ชม.</div><div style="font-size:12px;color:var(--muted)">เวลาขับรถรวม</div></div>
+    <div><div style="font-size:22px;font-weight:800;color:var(--primary)">6 stops</div><div style="font-size:12px;color:var(--muted)">จุดแวะพัก</div></div>
+    <div><div style="font-size:22px;font-weight:800;color:var(--primary)">🎉</div><div style="font-size:12px;color:var(--muted)">สนุกทั้งวัน!</div></div>
+  </div>
+
+</div><!-- /day1 section -->
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════════ DAY 2 ══ -->
+<div class="timeline-section container">
+  <div class="day-header day2">
+    <span>🌅</span>
+    <div>
+      <div>วันที่ 2 — เช้าสบาย แล้วมุ่งหน้ากลับบ้าน</div>
+      <div style="font-size:13px;font-weight:500;opacity:0.85;">Saisook · LP Thuat · เขื่อนลำตะคอง · BTS อุดมสุข</div>
+    </div>
+    <span class="day-num">02</span>
+  </div>
+
+  <div class="timeline day2">
+
+    <!-- 10:00 Checkout -->
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-card checkin">
+        <div class="tl-time-row">
+          <span class="tl-time">🧳 10:00 น.</span>
+        </div>
+        <h3>🛎️ Checkout — BeFinn Pool Villa</h3>
+        <p>เก็บของ เช็คห้อง Return key เรียบร้อย พร้อมออกเดินทางต่อ</p>
+        <div class="location">445/51, Pak Chong District, Nakhon Ratchasima 30450</div>
+      </div>
+    </div>
+
+    <!-- leg 1 -->
+    <div class="leg-connector">
+      <div class="leg-info">
+        <span class="icon">🛣️</span>
+        <span>ถนนธนะรัชต์ → Mu Si</span>
+        <span class="leg-badge km">📏 ~8 กม.</span>
+        <span class="leg-badge dur">⏱️ ~12 นาที</span>
+      </div>
+    </div>
+
+    <!-- 10:12 Saisook -->
+    <div class="tl-item">
+      <div class="tl-dot special"></div>
+      <div class="tl-card">
+        <div class="tl-time-row">
+          <span class="tl-time">🌳 10:12 น.</span>
+          <span class="leg-badge">แวะ ~45 นาที</span>
+        </div>
+        <h3>🍦 Saisook Khao Yai (ไทรสุก) — ไอศกรีม + บรรยากาศ</h3>
+        <p>ต้นไทรใหญ่ร่มรื่น บรรยากาศดีมาก ไอศกรีมเขาใหญ่เลื่องชื่อ ถ่ายรูปสวย อากาศดีช่วงเช้า ใช้เวลาพักผ่อน cool down ก่อนขับรถกลับ</p>
+        <div class="location">286, Tambon Mu Si, Pak Chong District, Nakhon Ratchasima 30130</div>
+        <div class="tl-meta">
+          <span class="cost-tag">💰 ~100-200฿/คน</span>
+          <a class="map-btn" href="https://maps.google.com/?q=Saisook+Khao+Yai+ไทรสุก+เขาใหญ่" target="_blank">🗺️ Map</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- leg 2 -->
+    <div class="leg-connector">
+      <div class="leg-info">
+        <span class="icon">🛣️</span>
+        <span>ถนนธนะรัชต์ ต่อไป กม. 118</span>
+        <span class="leg-badge km">📏 ~10 กม.</span>
+        <span class="leg-badge dur">⏱️ ~13 นาที</span>
+      </div>
+    </div>
+
+    <!-- 11:10 LP Thuat -->
+    <div class="tl-item">
+      <div class="tl-dot special"></div>
+      <div class="tl-card">
+        <div class="tl-time-row">
+          <span class="tl-time">🙏 11:10 น.</span>
+          <span class="leg-badge">แวะกราบ ~30 นาที</span>
+        </div>
+        <h3>⛪ หลวงพ่อทวด เขาใหญ่ — องค์ใหญ่ที่สุดในโลก</h3>
+        <p>หลวงพ่อทวดองค์ใหญ่ที่สุดในโลก! แวะกราบขอพร เสริมความเป็นสิริมงคลก่อนเดินทางกลับ บรรยากาศร่มเย็น วิวเขาใหญ่สวยงาม</p>
+        <div class="location">118 ถนนธนะรัชต์, Mu Si, Pak Chong District, Nakhon Ratchasima 30130</div>
+        <div class="tl-meta">
+          <a class="map-btn" href="https://maps.google.com/?q=Luang+Phor+Thuat+Khao+Yai+largest+world+Pak+Chong" target="_blank">🗺️ Map</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- leg 3 -->
+    <div class="leg-connector">
+      <div class="leg-info">
+        <span class="icon">🛣️</span>
+        <span>ถนนธนะรัชต์ ลงมา → ปากช่อง → ทล.2 → อ.สีคิ้ว</span>
+        <span class="leg-badge km">📏 ~85 กม.</span>
+        <span class="leg-badge dur">⏱️ ~1 ชม. 15 นาที</span>
+      </div>
+    </div>
+
+    <!-- 12:35 Lamtakhong Dam -->
+    <div class="tl-item">
+      <div class="tl-dot special"></div>
+      <div class="tl-card">
+        <div class="tl-time-row">
+          <span class="tl-time">💧 12:35 น.</span>
+          <span class="leg-badge">แวะกิน + เดินเล่น ~1.5 ชม.</span>
+        </div>
+        <h3>🏞️ เขื่อนลำตะคอง — มื้อกลางวัน + วิวอ่างเก็บน้ำ</h3>
+        <p>เขื่อนลำตะคองสวยงาม วิวกว้างมาก มีร้านอาหารริมน้ำ กินข้าวกลางวันพร้อมวิวอ่างเก็บน้ำ ลมเย็นสบาย เป็น hidden gem ของโคราช เหมาะพักก่อนขับรถยาวกลับบ้าน</p>
+        <div class="location">VH86+34F, Khlong Phai, Sikhio District, Nakhon Ratchasima 30340</div>
+        <div class="tl-meta">
+          <span class="cost-tag">💰 ~150-300฿/คน (อาหาร)</span>
+          <a class="map-btn" href="https://maps.google.com/?q=Lamtakhong+Dam+Sikhio+Nakhon+Ratchasima" target="_blank">🗺️ Map</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- leg 4 -->
+    <div class="leg-connector">
+      <div class="leg-info">
+        <span class="icon">🛣️</span>
+        <span>ทล.2 → ทล.6 มอเตอร์เวย์ → กรุงเทพฯ → Bang Na</span>
+        <span class="leg-badge km">📏 ~212 กม.</span>
+        <span class="leg-badge dur">⏱️ ~2.5-3 ชม.</span>
+      </div>
+    </div>
+
+    <!-- 17:00 BTS Udomsuk -->
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-card drive">
+        <div class="tl-time-row">
+          <span class="tl-time">🚇 ~17:00 น.</span>
+          <span class="leg-badge">🏁 จุดสิ้นสุด</span>
+        </div>
+        <h3>🏙️ BTS อุดมสุข (Exit 4) — ถึงบ้านปลอดภัย!</h3>
+        <p>ปลายทางการเดินทาง! แยกย้ายกันกลับบ้าน ทริปสุดเจ๋งจบลงอย่างสมบูรณ์ นัดเจอกันทริปหน้า 🎉</p>
+        <div class="location">BTS Udomsuk Station (Exit 4), Bang Na Nuea, Khet Bang Na, Bangkok 10260</div>
+        <div class="tl-meta">
+          <a class="map-btn" href="https://maps.google.com/?q=BTS+Udomsuk+Station+Bangkok" target="_blank">🗺️ Map</a>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /timeline day2 -->
+
+  <!-- Day 2 summary bar -->
+  <div style="background:linear-gradient(135deg,#f5f0ff,#faf5ff);border:1.5px solid #c7a9e8;border-radius:12px;padding:14px 16px;margin-top:12px;display:flex;gap:20px;flex-wrap:wrap;justify-content:center;text-align:center;">
+    <div><div style="font-size:22px;font-weight:800;color:var(--day2)">~315 กม.</div><div style="font-size:12px;color:var(--muted)">ระยะทางวันที่ 2</div></div>
+    <div><div style="font-size:22px;font-weight:800;color:var(--day2)">~4.5 ชม.</div><div style="font-size:12px;color:var(--muted)">เวลาขับรถรวม</div></div>
+    <div><div style="font-size:22px;font-weight:800;color:var(--day2)">5 stops</div><div style="font-size:12px;color:var(--muted)">จุดแวะพัก</div></div>
+    <div><div style="font-size:22px;font-weight:800;color:var(--day2)">🏠</div><div style="font-size:12px;color:var(--muted)">กลับบ้านปลอดภัย</div></div>
+  </div>
+
+</div><!-- /day2 section -->
+
+<!-- ══ DISTANCE BOX ══ -->
+<div class="dist-section container">
+  <div class="dist-card">
+    <h2>📊 ตารางระยะทางทุก Leg</h2>
+    <div class="dist-days">
+      <!-- Day 1 -->
+      <div class="dist-day">
+        <h4>📅 วันที่ 1 — ขาไป</h4>
+        <div class="dist-leg">
+          <span class="place">✈️ สุวรรณภูมิ → Makro สระบุรี</span>
+          <span style="display:flex;gap:6px">
+            <span class="km">~125 กม.</span>
+            <span class="dur">1:30 ชม.</span>
+          </span>
+        </div>
+        <div class="dist-leg">
+          <span class="place">🛒 Makro → กล้วยทอดสุโขทัย</span>
+          <span style="display:flex;gap:6px">
+            <span class="km">~60 กม.</span>
+            <span class="dur">0:50 ชม.</span>
+          </span>
+        </div>
+        <div class="dist-leg">
+          <span class="place">🍌 กล้วยทอด → ครัวกำปั่น</span>
+          <span style="display:flex;gap:6px">
+            <span class="km">~12 กม.</span>
+            <span class="dur">0:15 ชม.</span>
+          </span>
+        </div>
+        <div class="dist-leg">
+          <span class="place">🍽️ ครัวกำปั่น → Banyakart ATV</span>
+          <span style="display:flex;gap:6px">
+            <span class="km">~7 กม.</span>
+            <span class="dur">0:10 ชม.</span>
+          </span>
+        </div>
+        <div class="dist-leg">
+          <span class="place">🏍️ ATV → BeFinn Pool Villa</span>
+          <span style="display:flex;gap:6px">
+            <span class="km">~12 กม.</span>
+            <span class="dur">0:18 ชม.</span>
+          </span>
+        </div>
+        <div class="dist-leg">
+          <span class="place">รวมวันที่ 1</span>
+          <span style="display:flex;gap:6px">
+            <span class="km">~216 กม.</span>
+            <span class="dur">3:23 ชม.</span>
+          </span>
+        </div>
+      </div>
+      <!-- Day 2 -->
+      <div class="dist-day">
+        <h4>📅 วันที่ 2 — ขากลับ</h4>
+        <div class="dist-leg">
+          <span class="place">🏡 BeFinn → Saisook Café</span>
+          <span style="display:flex;gap:6px">
+            <span class="km">~8 กม.</span>
+            <span class="dur">0:12 ชม.</span>
+          </span>
+        </div>
+        <div class="dist-leg">
+          <span class="place">🌳 Saisook → LP Thuat</span>
+          <span style="display:flex;gap:6px">
+            <span class="km">~10 กม.</span>
+            <span class="dur">0:13 ชม.</span>
+          </span>
+        </div>
+        <div class="dist-leg">
+          <span class="place">🙏 LP Thuat → เขื่อนลำตะคอง</span>
+          <span style="display:flex;gap:6px">
+            <span class="km">~85 กม.</span>
+            <span class="dur">1:15 ชม.</span>
+          </span>
+        </div>
+        <div class="dist-leg">
+          <span class="place">💧 เขื่อนลำตะคอง → BTS อุดมสุข</span>
+          <span style="display:flex;gap:6px">
+            <span class="km">~212 กม.</span>
+            <span class="dur">2:45 ชม.</span>
+          </span>
+        </div>
+        <div class="dist-leg" style="height:20px;"></div>
+        <div class="dist-leg">
+          <span class="place">รวมวันที่ 2</span>
+          <span style="display:flex;gap:6px">
+            <span class="km">~315 กม.</span>
+            <span class="dur">4:25 ชม.</span>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="dist-total">
+      <div class="dist-total-item">
+        <div class="val">~535 กม.</div>
+        <div class="lbl">รวมทั้งทริป</div>
+      </div>
+      <div class="dist-total-item">
+        <div class="val">~8 ชม.</div>
+        <div class="lbl">เวลาขับรถรวม</div>
+      </div>
+      <div class="dist-total-item">
+        <div class="val">11 stops</div>
+        <div class="lbl">จุดแวะทั้งหมด</div>
+      </div>
+      <div class="dist-total-item">
+        <div class="val">~1,600฿</div>
+        <div class="lbl">ค่าน้ำมัน+ทางด่วน (est.)</div>
+      </div>
+    </div>
+    <div style="margin-top:12px;font-size:12px;color:rgba(255,255,255,0.55);text-align:center;">
+      ⚠️ ระยะทางโดยประมาณ อาจแตกต่างตามเส้นทางจริงและสภาพการจราจร | คำนวณจากที่อยู่ที่ให้มา
+    </div>
+  </div>
+</div>
+
+<!-- ══ COST ══ -->
+<div class="cost-section container">
+  <div class="cost-card">
+    <div class="cost-header">
+      <h2>💰 สรุปค่าใช้จ่าย (ต่อคน)</h2>
+      <div class="cost-total">
+        <div class="amount">฿1,700–2,400</div>
+        <div class="label">รวม / คน (ไม่รวมที่พัก)</div>
+      </div>
+    </div>
+    <div class="cost-bars">
+      <div class="cost-row">
+        <div class="cost-row-header">
+          <span class="cat">🍽️ อาหาร (ครัวกำปั่น + เขื่อน + ของว่าง)</span>
+          <span class="val">~700฿</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" style="width:38%"></div></div>
+      </div>
+      <div class="cost-row">
+        <div class="cost-row-header">
+          <span class="cat">🏍️ ATV Banyakart 1 ชั่วโมง</span>
+          <span class="val">~750฿</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" style="width:40%"></div></div>
+      </div>
+      <div class="cost-row">
+        <div class="cost-row-header">
+          <span class="cat">🛒 Makro BBQ (หารกัน 6 คน)</span>
+          <span class="val">~500฿</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" style="width:27%"></div></div>
+      </div>
+      <div class="cost-row">
+        <div class="cost-row-header">
+          <span class="cat">☕ คาเฟ่ + ไอศกรีม Saisook</span>
+          <span class="val">~200฿</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" style="width:11%"></div></div>
+      </div>
+    </div>
+    <div class="cost-note">⛽ ค่าน้ำมัน+ทางด่วน ~1,600฿ หาร 6 = ~270฿/คน (แยกต่างหาก) | ค่าที่พักไม่รวม</div>
+  </div>
+</div>
+
+<!-- ══ PREP ══ -->
+<div class="prep-section container">
+  <div class="section-title"><span>🎒</span> สิ่งที่ต้องเตรียม</div>
+  <div class="prep-grid">
+    <div class="prep-item must">
+      <span class="prep-icon">👟</span>
+      <div class="prep-name">รองเท้าแตะ</div>
+      <div class="prep-desc">ใส่สำรองหลัง ATV เพราะรองเท้าอาจเปียก/เลอะโคลน</div>
+    </div>
+    <div class="prep-item must">
+      <span class="prep-icon">👕</span>
+      <div class="prep-name">เสื้อผ้า 2 ชุด</div>
+      <div class="prep-desc">ชุดพร้อมเลอะสำหรับ ATV + ชุดสะอาดสำหรับเย็นที่ Villa</div>
+    </div>
+    <div class="prep-item">
+      <span class="prep-icon">📸</span>
+      <div class="prep-name">Action Camera</div>
+      <div class="prep-desc">GoPro ติดหัวบน ATV ได้ footage สุดเจ๋ง ชาร์จแบตก่อน!</div>
+    </div>
+    <div class="prep-item">
+      <span class="prep-icon">🧴</span>
+      <div class="prep-name">ครีมกันแดด</div>
+      <div class="prep-desc">กิจกรรมกลางแจ้งทั้งวัน SPF50+ แนะนำ</div>
+    </div>
+    <div class="prep-item">
+      <span class="prep-icon">🔋</span>
+      <div class="prep-name">Power Bank</div>
+      <div class="prep-desc">ขับรถยาว ชาร์จโทรศัพท์/GPS ตลอดเส้นทาง</div>
+    </div>
+    <div class="prep-item">
+      <span class="prep-icon">💳</span>
+      <div class="prep-name">เงินสด ~3,000฿</div>
+      <div class="prep-desc">บางร้าน ATV และร้านอาหารบางแห่งรับเฉพาะเงินสด</div>
+    </div>
+    <div class="prep-item">
+      <span class="prep-icon">🧺</span>
+      <div class="prep-name">ถุงพลาสติก</div>
+      <div class="prep-desc">ใส่เสื้อผ้าเปียก/เลอะหลัง ATV แยกจากกระเป๋า</div>
+    </div>
+    <div class="prep-item">
+      <span class="prep-icon">💊</span>
+      <div class="prep-name">ยาประจำตัว</div>
+      <div class="prep-desc">ยาแก้ปวด ยาเมารถ พลาสเตอร์ ยาทาแมลงกัด</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TIPS ══ -->
+<div class="tips-section container">
+  <div class="section-title"><span>⚡</span> Tips สำคัญ</div>
+  <div class="tips-grid">
+    <div class="tip-card">
+      <span class="tip-icon">📞</span>
+      <div class="tip-text">
+        <h4>จองล่วงหน้า 3-7 วัน</h4>
+        <p>ครัวกำปั่น + Banyakart ATV ต้องจองก่อนทุกครั้ง โดยเฉพาะช่วงเสาร์-อาทิตย์ เต็มเร็วมาก</p>
+      </div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-icon">🚐</span>
+      <div class="tip-text">
+        <h4>เช่า Van 1 คัน</h4>
+        <p>6 คน เช่า Van ไปด้วยกัน คุ้มที่สุด ประหยัดน้ำมัน มีคนขับผลัดกัน นั่งสบาย และไม่มีปัญหาจอดรถต่างที่</p>
+      </div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-icon">🛒</span>
+      <div class="tip-text">
+        <h4>Makro เป็น Strategic Stop</h4>
+        <p>แวะ Makro สระบุรีตอนขาไป ซื้อของ BBQ ให้ครบ เนื้อ หมู ผัก ถ่าน เครื่องดื่ม ถูกกว่าซื้อในเขาใหญ่มาก</p>
+      </div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-icon">⛽</span>
+      <div class="tip-text">
+        <h4>เติมน้ำมันที่ปากช่อง</h4>
+        <p>เติมน้ำมันให้เต็มก่อนขึ้น ถนนธนะรัชต์ ปั๊มในเขาใหญ่มีน้อยและราคาสูงกว่า</p>
+      </div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-icon">🎽</span>
+      <div class="tip-text">
+        <h4>Plan เสื้อผ้าให้ดี</h4>
+        <p>ใส่ชุด ATV ตั้งแต่ออกรถ เปลี่ยนชุดใหม่ตอนเช็คอิน ชุดสะอาดสำหรับ BBQ ยามเย็น + วันที่ 2</p>
+      </div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-icon">🌤️</span>
+      <div class="tip-text">
+        <h4>เช็คสภาพอากาศ</h4>
+        <p>เขาใหญ่ฝนตกได้บ่อย เตรียมเสื้อกันฝนบางๆ และถุงกันน้ำสำหรับโทรศัพท์ไว้ด้วย</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div style="font-size:28px;margin-bottom:8px;">🏕️🔥🏍️💧🚇</div>
+  <strong>เขาใหญ่ Adventure Trip — 6 คน · 1 คืน 2 วัน</strong><br>
+  <span style="font-size:13px;opacity:0.8;">สุวรรณภูมิ → Makro สระบุรี → ปากช่อง → เขาใหญ่ → เขื่อนลำตะคอง → BTS อุดมสุข</span><br>
+  <span style="font-size:12px;opacity:0.55;display:block;margin-top:6px;">รวมระยะทาง ~535 กม. | ขับรถรวม ~8 ชม. | ค่าใช้จ่าย ~1,700-2,400฿/คน (ไม่รวมที่พัก + น้ำมัน)</span>
+</footer>
+
+</body>
+</html>
